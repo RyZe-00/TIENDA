@@ -4,9 +4,28 @@
     <li><%= link_to 'Inicio', root_path %></li>
     <li><%= link_to 'Productos', products_path %></li>
     <li><%= link_to 'Categorías', categories_path %></li>
-    <li><%= link_to 'Iniciar Sesión', new_user_session_path %></li>
-    <li><%= link_to 'Registrarse', new_user_registration_path %></li>
+
+    <% if user_signed_in? %>
+      <%= button_to 'Cerrar Sesion', destroy_user_session_path, method: :delete %>
+    <% else %>
+      <li><%= link_to 'Iniciar Sesión', new_user_session_path %></li>
+      <li><%= link_to 'Registrarse', new_user_registration_path %></li>
+    <% end %>
   </ul>
 </nav>
 
+<% if current_user&.administrador? %>
+  <%= link_to 'Add New Product', new_product_path, class: 'btn btn-primary' %>
+<% end %>
+
+<div class="product-grid">
+  <% @products.each do |product| %>
+    <div class="product-card">
+      <h2><%= product.name %></h2>
+      <p><%= product.description %></p>
+      <p>Precio: <%= number_to_currency(product.price) %></p>
+      <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
+    </div>
+  <% end %>
+</div>
 

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root 'home#index'
+
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   resources :cart_products
   resources :product_images
   resources :product_reviews
@@ -9,7 +11,6 @@ Rails.application.routes.draw do
   resources :order_states
   resources :user_addresses
   resources :user_roles
-  devise_for :users
   resources :reports
   resources :carts
   resources :products
