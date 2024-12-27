@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.4"
 
 gem "devise"
+gem 'sassc-rails'
+gem 'bootstrap', '~> 5.1.3'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8", ">= 7.0.8.7"

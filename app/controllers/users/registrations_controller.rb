@@ -6,14 +6,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   
   def create
-    build_resource
-  
+    build_resource(sign_up_params) # Asegúrate de usar los parámetros permitidos
+
     # Asignar el rol seleccionado al nuevo usuario
     if params[:user][:role_id].present?
       role = Role.find(params[:user][:role_id])
-      resource.roles << role # Esto debería funcionar ahora
+      resource.roles << role
     end
-  
+
     resource.save
     yield resource if block_given?
     if resource.persisted?
