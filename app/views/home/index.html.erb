@@ -48,8 +48,9 @@
 
 <% if current_user&.administrador? %>
   <div class="text-center my-3">
-    <%= link_to 'Añadir Prodcuto', new_product_path, class: 'btn btn-primary' %>
+    <%= link_to 'Añadir Producto', new_product_path, class: 'btn btn-primary' %>
     <%= link_to 'Añadir Categoría', new_category_path, class: 'btn btn-secondary ml-2' %>
+    <%= link_to 'Ver Categorías', categories_path, class: 'btn btn-info' %>
   </div>
 <% end %>
 
@@ -59,9 +60,20 @@
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
+            <!-- Mostrar imagen del producto -->
+            <% if product.images.attached? %>
+              <div class="mb-3">
+                <%= image_tag product.images.first, class: "card-img-top img-fluid" %> <!-- Mostrar la primera imagen -->
+              </div>
+            <% else %>
+              <p>No hay imagen disponible</p>
+            <% end %>
+
+            <!-- Nombre y descripción del producto -->
             <h5 class="card-title"><%= product.name %></h5>
-            <p class="card-text"><%= product.description %></p>
             <p class="card-text">Precio: <%= number_to_currency(product.price) %></p>
+
+            <!-- Enlaces y botones -->
             <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
             <%= button_to 'Añadir al Carrito', add_product_cart_path(product_id: product.id, quantity: 1), method: :post, class: 'btn btn-success' %>
           </div>
@@ -70,3 +82,4 @@
     <% end %>
   </div>
 </div>
+

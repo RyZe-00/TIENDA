@@ -24,5 +24,12 @@
     <%= @product.categories.map(&:name).join(", ") %>
   </p>
 
+  <h2>Imágenes:</h2>
+  <div>
+    <% @product.images.each do |image| %>
+      <%= image_tag image.variant(resize_to_limit: [300, 300]) %>
+    <% end %>
+  </div>
+
 
 </div>

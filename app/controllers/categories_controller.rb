@@ -23,13 +23,16 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
 
-    respond_to do |format|
+    # Verificar si la categoría ya existe
+    if Category.exists?(name: @category.name)
+      flash[:alert] = "Ya existe una categoría con ese nombre."
+      render :new
+    else
       if @category.save
-        format.html { redirect_to @category, notice: "Category was successfully created." }
-        format.json { render :show, status: :created, location: @category }
+        flash[:notice] = "Categoría creada exitosamente."
+        redirect_to categories_path
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
+        render :new
       end
     end
   end

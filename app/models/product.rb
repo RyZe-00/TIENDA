@@ -9,6 +9,9 @@ class Product < ApplicationRecord
   has_many :product_reviews
   has_many :product_images
 
+  has_many_attached :images
+  validates :name, presence: true
+
   def self.ransackable_attributes(auth_object = nil)
     ["name", "description", "price"] # Agrega los atributos que deseas permitir que Ransack busque
   end
