@@ -31,13 +31,25 @@
           </li>
         <% end %>
       </ul>
+
+      <!-- Formulario de búsqueda con Ransack -->
+      <%= search_form_for @q, url: root_path, method: :get, html: { class: 'd-flex' } do |f| %>
+        <div class="input-group">
+          <%= f.search_field :name_cont, class: 'form-control me-2', placeholder: 'Buscar productos' %>
+          <div class="input-group-append">
+            <%= f.submit "Buscar", class: 'btn btn-outline-success' %>
+          </div>
+        </div>
+      <% end %>
+
     </div>
   </div>
 </nav>
 
 <% if current_user&.administrador? %>
   <div class="text-center my-3">
-    <%= link_to 'Add New Product', new_product_path, class: 'btn btn-primary' %>
+    <%= link_to 'Añadir Prodcuto', new_product_path, class: 'btn btn-primary' %>
+    <%= link_to 'Añadir Categoría', new_category_path, class: 'btn btn-secondary ml-2' %>
   </div>
 <% end %>
 

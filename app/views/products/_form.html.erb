@@ -2,7 +2,6 @@
   <% if product.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
-
       <ul>
         <% product.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -30,7 +29,13 @@
     <%= form.label :quantity, style: "display: block" %>
     <%= form.text_field :quantity %>
   </div>
-  
+
+  <div>
+    <%= form.label :category_ids, "Categorías", style: "display: block" %>
+    <%= form.collection_select :category_ids, @categories, :id, :name, 
+      { prompt: "Selecciona categorías" }, 
+      { multiple: true, size: 5, id: "category-select" } %>
+  </div>
 
   <div>
     <%= form.submit %>

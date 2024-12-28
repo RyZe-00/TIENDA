@@ -19,4 +19,10 @@
     <%= product.price %>
   </p>
 
+  <p>
+    <strong>Categorías:</strong>
+    <%= @product.categories.map(&:name).join(", ") %>
+  </p>
+
+
 </div>

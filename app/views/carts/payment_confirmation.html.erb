@@ -1,0 +1,14 @@
+<h1 class="text-center my-4">Confirmación de Pago</h1>
+
+<div class="text-center">
+  <p>Gracias por tu compra!</p>
+  <p>Total: <%= number_to_currency(@cart.total_price) %></p>
+  <% if @payment %>
+    <p>Estado del pago: <%= @payment.payment_state&.name || 'Desconocido' %></p>
+    <p>Método de pago: <%= @payment.payment_method&.name || 'Desconocido' %></p>
+  <% else %>
+    <p>No se encontró información de pago.</p>
+  <% end %>
+</div>
+
+<%= link_to 'Volver al inicio', root_path, class: 'btn btn-primary' %>

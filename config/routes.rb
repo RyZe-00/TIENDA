@@ -16,10 +16,12 @@ Rails.application.routes.draw do
     post 'add_product/:product_id', to: 'carts#add_product', as: 'add_product'
     post 'update_quantity/:product_id', to: 'carts#update_quantity', as: 'update_quantity'
     post 'remove_product/:product_id', to: 'carts#remove_product', as: 'remove_product'
-    
     # Nuevas rutas para los usuarios registrados
     delete 'remove2/:product_id', to: 'carts#remove_product2', as: 'remove_product2'
     patch 'update_quantity2/:product_id', to: 'carts#update_quantity2', as: 'update_quantity2'
+    # Rutas para el pago
+    get 'checkout', to: 'carts#checkout', as: 'checkout'
+    get 'payment_confirmation', to: 'carts#payment_confirmation', as: 'payment_confirmation'
   end
   resources :products
   resources :orders

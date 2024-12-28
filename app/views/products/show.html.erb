@@ -3,8 +3,9 @@
 <%= render @product %>
 
 <div>
-  <%= link_to "Edit this product", edit_product_path(@product) %> |
-  <%= link_to "Back to products", products_path %>
-
-  <%= button_to "Destroy this product", @product, method: :delete %>
+  <% if current_user&.administrador? %> <!-- Verifica si el usuario es administrador -->
+    <%= link_to "Edit this product", edit_product_path(@product), class: "btn btn-primary" %> |
+    <%= button_to "Destroy this product", @product, method: :delete, data: { confirm: "¿Estás seguro de que deseas eliminar este producto?" }, class: "btn btn-danger" %>
+  <% end %>
+    <%= link_to "Back to home", root_path, class: "btn btn-secondary" %>
 </div>

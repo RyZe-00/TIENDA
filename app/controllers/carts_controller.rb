@@ -6,6 +6,40 @@ class CartsController < ApplicationController
     @carts = Cart.all
   end
 
+  def checkout
+    @cart = current_user.cart
+
+    # Busca o crea un pedido asociado al carrito
+    order = @cart.order || Order.create(
+      user: current_user,
+      cart: @cart,
+      total_price: @cart.total_price
+    )
+
+    # Crea el pago asociado al pedido
+    @payment = Payment.create(
+      order: order,
+      total_amount: order.total_price,
+      payment_state: PaymentState.find_or_create_by(name: 'Pendiente'),
+      payment_method: PaymentMethod.first # Cambia según tus datos
+    )
+
+    if @payment.persisted?
+      redirect_to payment_confirmation_cart_path, notice: 'Pago realizado correctamente.'
+    else
+      redirect_to cart_path, alert: 'Hubo un problema al procesar el pago.'
+    end
+  end
+
+  def payment_confirmation
+    @cart = current_user.cart
+    @payment = @cart.order&.payment # Asegúrate de que @payment se asigne correctamente desde el pedido del carrito
+
+    unless @payment
+      redirect_to cart_path, alert: 'No se encontró el pago asociado.'
+    end
+  end
+
   def add_product
     product_id = params[:product_id].to_i
     quantity = params[:quantity].to_i

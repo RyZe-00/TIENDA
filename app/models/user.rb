@@ -5,11 +5,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :orders
+  
+  has_many :orders, dependent: :destroy
   has_one :cart, dependent: :destroy
   has_many :user_role
   has_many :roles, through: :user_role
   has_many :user_addresses
+
+  after_create :create_cart
 
   def administrador?
     roles.exists?(name: 'Administrador') # Asegúrate de que 'Administrador' sea el nombre correcto del rol
