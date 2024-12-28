@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
 
   # GET /products or /products.json
   def index
+    @products = Product.includes(:categories).all
     @q = Product.ransack(params[:q])  # Inicializa el objeto de búsqueda
     @products = @q.result(distinct: true)  # Obtén los productos según la búsqueda
   end
@@ -58,10 +59,11 @@ class ProductsController < ApplicationController
 
   # DELETE /products/1 or /products/1.json
   def destroy
-    @product.destroy
+    @product.product_categories.destroy_all # Elimina las asociaciones en product_categories
+    @product.destroy # Luego elimina el producto
 
     respond_to do |format|
-      format.html { redirect_to products_path, status: :see_other, notice: "Product was successfully destroyed." }
+      format.html { redirect_to root_path, status: :see_other, notice: "Product was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -70,6 +72,9 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+      if @product.nil?
+        redirect_to products_path, alert: "Producto no encontrado."
+      end
     end
 
     # Only allow a list of trusted parameters through.

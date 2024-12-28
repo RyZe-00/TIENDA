@@ -1,4 +1,4 @@
-<h1 class="text-center my-5 p-5 bg-primary text-white rounded shadow-lg">
+<h1 class="text-center my-2 p-2 bg-primary text-white rounded shadow-lg">
   <i class="fas fa-store-alt"></i> BIENVENIDO A NUESTRA TIENDA
 </h1>
 
@@ -80,6 +80,7 @@
             <% if product.quantity == 0 %>
               <!-- Si está agotado, muestra el mensaje y oculta el botón -->
               <p class="text-danger">Producto Agotado</p>
+              <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
             <% else %>
               <!-- Si no está agotado, muestra el botón de añadir al carrito -->
               <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
