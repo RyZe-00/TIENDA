@@ -1,4 +1,7 @@
-<h1 class="text-center my-4">BIENVENIDO A NUESTRA TIENDA</h1>
+<h1 class="text-center my-5 p-5 bg-primary text-white rounded shadow-lg">
+  <i class="fas fa-store-alt"></i> BIENVENIDO A NUESTRA TIENDA
+</h1>
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
@@ -73,9 +76,15 @@
             <h5 class="card-title"><%= product.name %></h5>
             <p class="card-text">Precio: <%= number_to_currency(product.price) %></p>
 
-            <!-- Enlaces y botones -->
-            <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
-            <%= button_to 'Añadir al Carrito', add_product_cart_path(product_id: product.id, quantity: 1), method: :post, class: 'btn btn-success' %>
+            <!-- Verifica si el producto está agotado -->
+            <% if product.quantity == 0 %>
+              <!-- Si está agotado, muestra el mensaje y oculta el botón -->
+              <p class="text-danger">Producto Agotado</p>
+            <% else %>
+              <!-- Si no está agotado, muestra el botón de añadir al carrito -->
+              <%= link_to 'Ver Detalles', product_path(product), class: 'btn btn-info' %>
+              <%= button_to 'Añadir al Carrito', add_product_cart_path(product_id: product.id, quantity: 1), method: :post, class: 'btn btn-success' %>
+            <% end %>
           </div>
         </div>
       </div>

@@ -8,14 +8,14 @@ class CartsController < ApplicationController
 
   def checkout
     @cart = current_user.cart
-
+  
     # Busca o crea un pedido asociado al carrito
     order = @cart.order || Order.create(
       user: current_user,
       cart: @cart,
       total_price: @cart.total_price
     )
-
+  
     # Crea el pago asociado al pedido
     @payment = Payment.create(
       order: order,
@@ -23,18 +23,32 @@ class CartsController < ApplicationController
       payment_state: PaymentState.find_or_create_by(name: 'Pendiente'),
       payment_method: PaymentMethod.first # Cambia según tus datos
     )
-
+  
     if @payment.persisted?
+      # Reducir el inventario de cada producto en el carrito
+      @cart.cart_products.each do |cart_product|
+        product = cart_product.product
+  
+        # Verifica que haya suficiente cantidad y reduce el inventario
+        if product.quantity >= cart_product.quantity
+          product.update(quantity: product.quantity - cart_product.quantity)
+        else
+          # Si no hay suficiente stock, muestra un error
+          flash[:alert] = "No hay suficiente stock para algunos productos."
+          redirect_to cart_path and return
+        end
+      end
+  
       redirect_to payment_confirmation_cart_path, notice: 'Pago realizado correctamente.'
     else
       redirect_to cart_path, alert: 'Hubo un problema al procesar el pago.'
     end
   end
-
+  
   def payment_confirmation
     @cart = current_user.cart
     @payment = @cart.order&.payment # Asegúrate de que @payment se asigne correctamente desde el pedido del carrito
-
+  
     unless @payment
       redirect_to cart_path, alert: 'No se encontró el pago asociado.'
     end
@@ -60,6 +74,16 @@ class CartsController < ApplicationController
   
       # Validar cantidad
       product = cart_product.product
+
+      # Asegúrate de que product.quantity no sea nil
+      available_stock = product.quantity || 0
+
+      # Verificar si la cantidad en el carrito es mayor que el stock disponible
+      if cart_product.quantity > available_stock
+        redirect_to cart_path(product_id), alert: 'No hay suficiente stock de este producto.'
+        return
+      end
+
       if cart_product.quantity > product.quantity
         redirect_to cart_path(product_id), alert: 'No hay suficiente stock de este producto.'
         return
